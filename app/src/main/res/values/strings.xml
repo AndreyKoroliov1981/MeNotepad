@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Me Notepad</string>
+    <string name="input_text">Input text</string>
+    <string name="action_save">Save</string>
+    <string name="action_del">Delete</string>
+    <string name="action_exit">Exit</string>
+</resources>
