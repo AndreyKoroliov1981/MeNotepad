@@ -4,8 +4,13 @@ For keeping daily records, keeping interesting links.
 
 # Install
 You have to copy the files to your computer and open with Android Studio or IntelliJ IDEA and run the project.
+
 # Usage
 Use as a notebook. After typing a note, click the save icon. If the note is not needed, then select the Delete submenu in the settings. If necessary, select Exit in the submenu to close the activation.
+
+![This is an image](/screenshots/note.png)
+
+![This is an image2](/screenshots/mynotepad_subMenu.png)
 
 # Contributing
 The program was carried out with the assistance of the [Skillbox](https://skillbox.ru) online school team.
