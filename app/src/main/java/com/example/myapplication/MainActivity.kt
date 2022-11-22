@@ -1,72 +1,64 @@
 package com.example.myapplication
 
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.EditText
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_main.*
+import androidx.appcompat.app.AppCompatActivity
+import com.example.myapplication.databinding.ActivityMainBinding
 
+class MainActivity : AppCompatActivity(), MainView {
 
-class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
 
-    val APP_PREFERENCES = "mytext"
-    val APP_PREFERENCES_TEXT = "text"
-
-    lateinit var pref: SharedPreferences
+    private lateinit var presenter : MainPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        getSupportActionBar()!!.setBackgroundDrawable(ColorDrawable(Color.rgb(0,0,245)))
-        pref = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE)
-        loadText()
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
+        supportActionBar!!.setBackgroundDrawable(ColorDrawable(Color.rgb(0, 0, 245)))
+        //presenter = MainPresenter.Base(MainModel.Base(this))
+        presenter=(application as App).presenter
+        loadData(presenter.loadData())
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return super.onCreateOptionsMenu(menu)
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.action_exit ->finish()
-            R.id.action_save -> saveText()
-            R.id.action_del -> {deleteText(); loadText();}
+        when (item.itemId) {
+            R.id.action_exit -> finish()
+            R.id.action_save -> saveData()
+            R.id.action_del -> deleteData()
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun loadText() {
-        val savedText=pref.getString(APP_PREFERENCES_TEXT,"")
-        note_Text.setText(savedText)
-        Toast.makeText(applicationContext,"Load Text", Toast.LENGTH_SHORT).show()
-
-    }
-
-    private fun deleteText() {
-        val editor=pref.edit()
-        editor.putString(APP_PREFERENCES_TEXT,"")
-        editor.apply()
-        Toast.makeText(applicationContext,"Delete Text", Toast.LENGTH_SHORT).show()
-
-    }
-
-    private fun saveText() {
-        val editor=pref.edit()
-        editor.putString(APP_PREFERENCES_TEXT,note_Text.text.toString())
-        editor.apply()
-        Toast.makeText(applicationContext,"Save Text", Toast.LENGTH_SHORT).show()
-    }
-
     override fun onDestroy() {
+        saveData()
         super.onDestroy()
-        saveText()
+    }
+
+    override fun loadData(data: String) {
+        binding.noteText.setText(data)
+        Toast.makeText(applicationContext, "Load Text", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun saveData() {
+        Toast.makeText(applicationContext, "Save Text", Toast.LENGTH_SHORT).show()
+        presenter.saveData(binding.noteText.text.toString())
+    }
+
+    override fun deleteData() {
+        Toast.makeText(applicationContext, "Delete text", Toast.LENGTH_SHORT).show()
+        binding.noteText.setText("")
+        presenter.deleteData()
     }
 }
