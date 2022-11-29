@@ -29,7 +29,5 @@ interface MainModel {
             editor.clear()
             editor.apply()
         }
-
     }
-
 }

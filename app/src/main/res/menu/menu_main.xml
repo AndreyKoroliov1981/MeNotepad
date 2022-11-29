@@ -2,9 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-
-
     <item android:icon="@android:drawable/ic_menu_save"
           android:id="@+id/action_save"
           android:title="@string/action_save"
@@ -16,10 +13,15 @@
           android:orderInCategory="2"
           app:showAsAction="never" />
 
+    <item android:id="@+id/action_theme"
+        android:title="@string/action_theme"
+        android:orderInCategory="3"
+        app:showAsAction="never" />
+
 
     <item android:id="@+id/action_exit"
           android:title="@string/action_exit"
-          android:orderInCategory="3"
+          android:orderInCategory="4"
           app:showAsAction="never" />
 
 </menu>

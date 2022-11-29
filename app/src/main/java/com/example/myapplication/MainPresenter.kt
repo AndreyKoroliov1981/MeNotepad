@@ -6,8 +6,6 @@ interface MainPresenter {
     fun saveData(date: String)
     fun deleteData()
 
-   //fun attachView(mainView: MainView)
-
     class Base(private val model: MainModel) : MainPresenter {
         
         private var view: MainView = MainView.Empty()
@@ -25,12 +23,5 @@ interface MainPresenter {
             model.deleteData()
             view.deleteData()
         }
-
-//        override fun attachView(mainView: MainView) {
-//            view = mainView
-//            Log.d("tag","attached view")
-//        }
-
-
     }
 }

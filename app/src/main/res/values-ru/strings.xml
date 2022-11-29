@@ -4,4 +4,9 @@
     <string name="action_save">Сохранить</string>
     <string name="action_del">Удалить</string>
     <string name="action_exit">Выйти</string>
+    <string name="action_theme">Тема</string>
+    <string name="light_theme">Светлая</string>
+    <string name="dark_theme">Тёмная</string>
+    <string name="system_theme">Системная</string>
+    <string name="textTitleDialogChoiceTheme">Выберите тему приложения</string>
 </resources>
