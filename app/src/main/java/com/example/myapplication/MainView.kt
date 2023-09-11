@@ -13,7 +13,5 @@ interface MainView {
         override fun saveData() = Unit
 
         override fun deleteData() = Unit
-
     }
-
 }

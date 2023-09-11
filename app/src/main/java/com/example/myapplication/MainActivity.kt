@@ -1,15 +1,12 @@
 package com.example.myapplication
 
 import android.content.Context
-import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -45,7 +42,7 @@ class MainActivity : AppCompatActivity(), MainView {
 
         supportFragmentManager.setFragmentResultListener(
             REQUEST_KEY_FOR_DIALOG,
-            this
+            this,
         ) { _, bundle ->
             when (bundle.getString(KEY_FOR_PRESSED_BUTTON)) {
                 KEY_FOR_LIGHT -> {
