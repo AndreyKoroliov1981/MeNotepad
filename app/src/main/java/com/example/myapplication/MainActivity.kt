@@ -5,11 +5,13 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import com.example.myapplication.choicetheme.ChoiceThemeDialogFragment
 import com.example.myapplication.databinding.ActivityMainBinding
 
@@ -29,17 +31,15 @@ class MainActivity : AppCompatActivity(), MainView {
 
     private val sharedPrefs by lazy { getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE) }
 
+    private var iconSaveLoadMenu: MenuItem? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         initTheme()
-
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(Color.rgb(0, 0, 245)))
         presenter = (application as App).presenter
-        loadData(presenter.loadData())
-
         supportFragmentManager.setFragmentResultListener(
             REQUEST_KEY_FOR_DIALOG,
             this,
@@ -69,13 +69,21 @@ class MainActivity : AppCompatActivity(), MainView {
                 menu.getItem(2).isVisible = false
             }
         }
+        iconSaveLoadMenu = menu?.getItem(0)
+        loadData(presenter.loadData())
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_exit -> finish()
-            R.id.action_save -> saveData()
+            R.id.action_save -> {
+                saveData()
+                item.iconTintList = ContextCompat.getColorStateList(this, R.color.colorSave)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    item.iconTintList = ContextCompat.getColorStateList(this, R.color.colorWhite)
+                }, 800)
+            }
             R.id.action_theme -> choiceTheme()
             R.id.action_del -> deleteData()
         }
@@ -97,16 +105,20 @@ class MainActivity : AppCompatActivity(), MainView {
 
     override fun loadData(data: String) {
         binding.noteText.setText(data)
-        Toast.makeText(applicationContext, "Load Text", Toast.LENGTH_SHORT).show()
+        if (iconSaveLoadMenu != null) {
+            iconSaveLoadMenu?.iconTintList =
+                ContextCompat.getColorStateList(this, R.color.colorLoad)
+            Handler(Looper.getMainLooper()).postDelayed({
+                iconSaveLoadMenu?.iconTintList = ContextCompat.getColorStateList(this, R.color.colorWhite)
+            }, 800)
+        }
     }
 
     override fun saveData() {
-        Toast.makeText(applicationContext, "Save Text", Toast.LENGTH_SHORT).show()
         presenter.saveData(binding.noteText.text.toString())
     }
 
     override fun deleteData() {
-        Toast.makeText(applicationContext, "Delete text", Toast.LENGTH_SHORT).show()
         binding.noteText.setText("")
         presenter.deleteData()
     }
