@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +23,7 @@ const val THEME_UNDEFINED = -1
 const val THEME_LIGHT = 0
 const val THEME_DARK = 1
 const val THEME_SYSTEM = 2
+const val DELAY_FOR_COLORED_ICON_MS = 800L
 
 class MainActivity : AppCompatActivity(), MainView {
 
@@ -40,6 +42,7 @@ class MainActivity : AppCompatActivity(), MainView {
         initTheme()
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(Color.rgb(0, 0, 245)))
         presenter = (application as App).presenter
+//        loadData(presenter.loadData())
         supportFragmentManager.setFragmentResultListener(
             REQUEST_KEY_FOR_DIALOG,
             this,
@@ -70,7 +73,8 @@ class MainActivity : AppCompatActivity(), MainView {
             }
         }
         iconSaveLoadMenu = menu?.getItem(0)
-        loadData(presenter.loadData())
+        val data = presenter.loadData()
+        loadData(data)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -82,7 +86,7 @@ class MainActivity : AppCompatActivity(), MainView {
                 item.iconTintList = ContextCompat.getColorStateList(this, R.color.colorSave)
                 Handler(Looper.getMainLooper()).postDelayed({
                     item.iconTintList = ContextCompat.getColorStateList(this, R.color.colorWhite)
-                }, 800)
+                }, DELAY_FOR_COLORED_ICON_MS)
             }
             R.id.action_theme -> choiceTheme()
             R.id.action_del -> deleteData()
@@ -110,7 +114,7 @@ class MainActivity : AppCompatActivity(), MainView {
                 ContextCompat.getColorStateList(this, R.color.colorLoad)
             Handler(Looper.getMainLooper()).postDelayed({
                 iconSaveLoadMenu?.iconTintList = ContextCompat.getColorStateList(this, R.color.colorWhite)
-            }, 800)
+            }, DELAY_FOR_COLORED_ICON_MS)
         }
     }
 
