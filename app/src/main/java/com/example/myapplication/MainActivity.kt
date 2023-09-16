@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -35,6 +34,8 @@ class MainActivity : AppCompatActivity(), MainView {
 
     private var iconSaveLoadMenu: MenuItem? = null
 
+    private var viewedLoadIcon = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -42,7 +43,8 @@ class MainActivity : AppCompatActivity(), MainView {
         initTheme()
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(Color.rgb(0, 0, 245)))
         presenter = (application as App).presenter
-//        loadData(presenter.loadData())
+        loadData(presenter.loadData())
+        viewedLoadIcon = true
         supportFragmentManager.setFragmentResultListener(
             REQUEST_KEY_FOR_DIALOG,
             this,
@@ -73,8 +75,14 @@ class MainActivity : AppCompatActivity(), MainView {
             }
         }
         iconSaveLoadMenu = menu?.getItem(0)
-        val data = presenter.loadData()
-        loadData(data)
+        if (iconSaveLoadMenu != null && viewedLoadIcon) {
+            iconSaveLoadMenu?.iconTintList =
+                ContextCompat.getColorStateList(this, R.color.colorLoad)
+            Handler(Looper.getMainLooper()).postDelayed({
+                iconSaveLoadMenu?.iconTintList = ContextCompat.getColorStateList(this, R.color.colorWhite)
+            }, DELAY_FOR_COLORED_ICON_MS)
+            viewedLoadIcon = false
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -109,13 +117,6 @@ class MainActivity : AppCompatActivity(), MainView {
 
     override fun loadData(data: String) {
         binding.noteText.setText(data)
-        if (iconSaveLoadMenu != null) {
-            iconSaveLoadMenu?.iconTintList =
-                ContextCompat.getColorStateList(this, R.color.colorLoad)
-            Handler(Looper.getMainLooper()).postDelayed({
-                iconSaveLoadMenu?.iconTintList = ContextCompat.getColorStateList(this, R.color.colorWhite)
-            }, DELAY_FOR_COLORED_ICON_MS)
-        }
     }
 
     override fun saveData() {
